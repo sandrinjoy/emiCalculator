@@ -60,15 +60,13 @@ export default function App() {
               //
 
               return (
-                <>
-                  <div className="tablerow">
-                    <div>{x}</div>
-                    <div>{Math.round(cPrinciple)}</div>
-                    <div>{Math.round(cInterest)}</div>
-                    <div>{Math.round(cPaid)}</div>
-                    <div>{Math.round(cBalance)}</div>
-                  </div>
-                </>
+                <div className="tablerow" key={x}>
+                  <div>{x}</div>
+                  <div>{Math.round(cPrinciple)}</div>
+                  <div>{Math.round(cInterest)}</div>
+                  <div>{Math.round(cPaid)}</div>
+                  <div>{Math.round(cBalance)}</div>
+                </div>
               );
             })}
         </div>
