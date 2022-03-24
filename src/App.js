@@ -4,7 +4,7 @@ export default function App() {
   const [amount, setAmount] = useState(10000);
   const [interest, setInterest] = useState(10);
   const [duration, setDuration] = useState(12);
-  const [loanEMI, setLoanEMI] = useState(10550);
+  const [loanEMI, setLoanEMI] = useState(879);
   const [totalInterest, setTotalInterest] = useState(550);
   const [totalPayment, setTotalPayment] = useState(10550);
   const [show, setShow] = useState(true);
@@ -27,12 +27,11 @@ export default function App() {
 
   // rendering table
   const showEmiTable = () => {
-    let cBalance = totalPayment;
-    let cPaid = 0;
-
-    // these cPrinciple and cInterest are temporary. you have to replace it with proper formula
-    let cPrinciple = amount / duration;
-    let cInterest = totalInterest / duration;
+    const r = interest / 12 / 100; //monthly interest rate
+    let balance = amount; //remaining principle
+    let cPaid = 0; //current month  paid
+    let cPrinciple = 0; //current month principle
+    let cInterest = 0; //current month interest
     return (
       <>
         <div>
@@ -54,10 +53,11 @@ export default function App() {
           <hr />
           {duration > 0 &&
             Array.from(Array(duration), (_, index) => index + 1).map((x) => {
-              cBalance = totalPayment - x * loanEMI;
-              cPaid = cInterest + cPrinciple;
-              // here update cPrinciple and cInterest with whatever formula
-              //
+              cInterest = balance * r; //interest due for the month (correct)
+              cPrinciple = loanEMI - cInterest; //emi - due interest of the current month
+              cPaid = cInterest + cPrinciple; // just to validate emi = cinterest+cprinciple
+
+              balance = balance - cPrinciple; //updating balance with the paid principle current month
 
               return (
                 <div className="tablerow" key={x}>
@@ -65,7 +65,7 @@ export default function App() {
                   <div>{Math.round(cPrinciple)}</div>
                   <div>{Math.round(cInterest)}</div>
                   <div>{Math.round(cPaid)}</div>
-                  <div>{Math.round(cBalance)}</div>
+                  <div>{Math.round(balance)}</div>
                 </div>
               );
             })}
